@@ -85,7 +85,7 @@
   <div class="main-content">
     <iframe
       id="looker"
-      src="https://nubalia.cloud.looker.com/embed/dashboards/356?embed_domain=http://localhost:3000&sdk=3&allow_login_screen=true">
+      src="https://nubalia.cloud.looker.com/embed/dashboards/356?embed_domain=https://laura-diaz-dvt.github.io&sdk=3&allow_login_screen=true">
     </iframe>
   </div>
 
@@ -96,7 +96,7 @@ let salePriceValue = null
 
 
 function loadDashboard(dashboardId) {
-    let baseUrl = `https://nubalia.cloud.looker.com/embed/dashboards/${dashboardId}?embed_domain=http://localhost:3000&sdk=3&allow_login_screen=true`
+    let baseUrl = `https://nubalia.cloud.looker.com/embed/dashboards/${dashboardId}?embed_domain=https://laura-diaz-dvt.github.io&sdk=3&allow_login_screen=true`
 
     if (statusValue) {
       const encodedStatus = encodeURIComponent(statusValue)
@@ -148,3 +148,4 @@ window.addEventListener("message", (event) => {
 
 </body>
 </html>
+
