@@ -3,42 +3,109 @@
 <head>
   <meta charset="UTF-8">
   <title>Looker Embed Test</title>
+  <style>
+    /* Reset básico */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: Arial, sans-serif;
+    }
+
+    body {
+      display: flex;
+      height: 100vh;
+      background-color: #f5f5f5;
+    }
+
+    /* Sidebar estilo menú */
+    .sidebar {
+      width: 200px;
+      background-color: #1E1E2F;
+      color: white;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px 0;
+    }
+
+    .logo {
+      width: 150px;
+      margin-bottom: 40px;
+    }
+
+    .menu-button {
+      width: 150px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 18px;
+      font-weight: bold;
+      color: white;
+      background-color: #3B3B5A;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
+
+    .menu-button:hover {
+      background-color: #565678;
+    }
+
+    /* Contenedor del iframe */
+    .main-content {
+      flex: 1;
+      padding: 20px;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      flex-direction: column;
+    }
+
+    iframe {
+      width: 100%;
+      height: 80vh;
+      border: none;
+      border-radius: 10px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.2);
+      background-color: white;
+    }
+  </style>
 </head>
 <body>
 
-<button id="btn356">Test 1</button>
-<button id="btn357">Test 2</button>
+  <!-- Sidebar / menú lateral -->
+  <div class="sidebar">
+    <img src="devo_logo.png" alt="Logo Devoteam" class="logo">
+    <button id="btn356" class="menu-button">Test 1</button>
+    <button id="btn357" class="menu-button">Test 2</button>
+  </div>
 
-<hr>
-
-<iframe
-  id="looker"
-  src="https://nubalia.cloud.looker.com/embed/dashboards/356?embed_domain=https://laura-diaz-dvt.github.io&sdk=3&allow_login_screen=true"
-  width="100%"
-  height="800"
-  frameborder="0">
-</iframe>
+  <!-- Contenido principal con iframe -->
+  <div class="main-content">
+    <iframe
+      id="looker"
+      src="https://nubalia.cloud.looker.com/embed/dashboards/356?embed_domain=http://localhost:3000&sdk=3&allow_login_screen=true">
+    </iframe>
+  </div>
 
 <script>
 const iframe = document.getElementById('looker')
 let statusValue = null     // último Status capturado
-let pendingDashboard = null // dashboard que queremos cargar
+let salePriceValue = null 
 
 
 function loadDashboard(dashboardId) {
     let baseUrl = `https://nubalia.cloud.looker.com/embed/dashboards/${dashboardId}?embed_domain=http://localhost:3000&sdk=3&allow_login_screen=true`
 
     if (statusValue) {
-    // url-encode del valor de Status
-    const encodedStatus = encodeURIComponent(statusValue)
-    // agregamos Status como parámetro
-    baseUrl += `&Status=${encodedStatus}`
+      const encodedStatus = encodeURIComponent(statusValue)
+      baseUrl += `&Status=${encodedStatus}`
     }
-
-    // para añadir category por ejemplo
-    // if (categoryValue) {
-    // baseUrl += `&Category=${encodeURIComponent(categoryValue)}`
-    // }
+    if (salePriceValue) {
+      const encodedSalePrice = encodeURIComponent(salePriceValue)
+      baseUrl += `&Sale+Price=${encodedSalePrice}`
+    }
 
     iframe.src = baseUrl
 }
@@ -64,13 +131,15 @@ window.addEventListener("message", (event) => {
   if (data.type === "dashboard:run:complete") {
     const filtros = data.dashboard?.dashboard_filters
     const currentStatus = filtros?.Status
-
-    // para añadir por ejemplo category:
-    // const currentCategory = filtros?.Category
+    const currentSalePrice = filtros?.["Sale Price"]
 
     if (currentStatus) {
       statusValue = currentStatus
       console.log("Status actual:", statusValue)
+    }
+    if (currentSalePrice) {
+      salePriceValue = currentSalePrice
+      console.log("Sale Price actual:", salePriceValue)
     }
 
   }
@@ -79,4 +148,3 @@ window.addEventListener("message", (event) => {
 
 </body>
 </html>
-
