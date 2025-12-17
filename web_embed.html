@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Looker Embed Test</title>
+</head>
+<body>
+
+<button id="btn356">Test 1</button>
+<button id="btn357">Test 2</button>
+
+<hr>
+
+<iframe
+  id="looker"
+  src="https://nubalia.cloud.looker.com/embed/dashboards/356?embed_domain=http://localhost:3000&sdk=3&allow_login_screen=true"
+  width="100%"
+  height="800"
+  frameborder="0">
+</iframe>
+
+<script>
+const iframe = document.getElementById('looker')
+let statusValue = null     // último Status capturado
+let pendingDashboard = null // dashboard que queremos cargar
+
+
+function loadDashboard(dashboardId) {
+    let baseUrl = `https://nubalia.cloud.looker.com/embed/dashboards/${dashboardId}?embed_domain=http://localhost:3000&sdk=3&allow_login_screen=true`
+
+    if (statusValue) {
+    // url-encode del valor de Status
+    const encodedStatus = encodeURIComponent(statusValue)
+    // agregamos Status como parámetro
+    baseUrl += `&Status=${encodedStatus}`
+    }
+
+    // para añadir category por ejemplo
+    // if (categoryValue) {
+    // baseUrl += `&Category=${encodeURIComponent(categoryValue)}`
+    // }
+
+    iframe.src = baseUrl
+}
+
+
+// Botones
+document.getElementById('btn356').addEventListener('click', () => loadDashboard(356))
+document.getElementById('btn357').addEventListener('click', () => loadDashboard(357))
+
+// Escuchar eventos del dashboard
+window.addEventListener("message", (event) => {
+  if (event.source !== iframe.contentWindow ||
+      event.origin !== "https://nubalia.cloud.looker.com") return
+
+  let data
+  try {
+    data = (typeof event.data === "string") ? JSON.parse(event.data) : event.data
+  } catch(e) {
+    console.error("Error parseando el mensaje:", e)
+    return
+  }
+
+  if (data.type === "dashboard:run:complete") {
+    const filtros = data.dashboard?.dashboard_filters
+    const currentStatus = filtros?.Status
+
+    // para añadir por ejemplo category:
+    // const currentCategory = filtros?.Category
+
+    if (currentStatus) {
+      statusValue = currentStatus
+      console.log("Status actual:", statusValue)
+    }
+
+  }
+})
+</script>
+
+</body>
+</html>
