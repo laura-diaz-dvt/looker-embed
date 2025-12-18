@@ -142,6 +142,13 @@ const mainContent = document.getElementById('mainContent')
 
 toggleButton.addEventListener('click', () => {
     sidebar.classList.toggle('hidden')
+
+    // Ajustar contenido principal para que se mueva correctamente
+    if (sidebar.classList.contains('hidden')) {
+        mainContent.style.marginLeft = '0'
+    } else {
+        mainContent.style.marginLeft = '200px'
+    }
 })
 
 // Escuchar eventos del dashboard
@@ -170,3 +177,4 @@ window.addEventListener("message", (event) => {
 
 </body>
 </html>
+
