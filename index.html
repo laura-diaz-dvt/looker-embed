@@ -20,6 +20,7 @@
 
     /* Sidebar estilo menú */
     .sidebar {
+      flex: 0 0 200px; /* ancho fijo */
       width: 200px;
       background-color: #ffffff; /* Blanco */
       color: black;
@@ -27,10 +28,11 @@
       flex-direction: column;
       align-items: center;
       padding: 20px 0;
-      transition: width 0.3s;
+      transition: flex 0.3s, width 0.3s;
     }
 
     .sidebar.hidden {
+      flex: 0 0 0;
       width: 0;
       padding: 20px 0 20px 0;
       overflow: hidden;
@@ -61,8 +63,8 @@
 
     /* Botón tipo "hamburger" */
     .toggle-btn {
-      position: absolute; /* siempre visible */
-      top: 15px;
+      position: absolute;
+      top: 15px; /* arriba, no tapa el logo */
       left: 15px;
       background-color: #4a4a4a;
       color: white;
@@ -71,7 +73,7 @@
       padding: 8px 12px;
       cursor: pointer;
       border-radius: 6px;
-      z-index: 1000; /* que quede encima de todo */
+      z-index: 1000;
     }
 
     .toggle-btn:hover {
@@ -80,7 +82,7 @@
 
     /* Contenedor del iframe */
     .main-content {
-      flex: 1;
+      flex: 1; /* ocupa todo el espacio restante */
       padding: 20px;
       display: flex;
       justify-content: center;
@@ -151,13 +153,6 @@ const mainContent = document.getElementById('mainContent')
 
 toggleButton.addEventListener('click', () => {
     sidebar.classList.toggle('hidden')
-
-    // Ajustar contenido principal para que se mueva correctamente
-    if (sidebar.classList.contains('hidden')) {
-        mainContent.style.marginLeft = '0'
-    } else {
-        mainContent.style.marginLeft = '200px'
-    }
 })
 
 // Escuchar eventos del dashboard
