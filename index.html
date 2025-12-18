@@ -59,16 +59,23 @@
       background-color: #666666;
     }
 
-    /* Botón Show/Hide Sidebar */
-    #toggleSidebar {
-      margin: 10px;
-      padding: 10px 15px;
-      font-size: 16px;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      background-color: #4a4a4a; /* Gris oscuro */
+    /* Botón tipo "hamburger" */
+    .toggle-btn {
+      position: absolute; /* siempre visible */
+      top: 15px;
+      left: 15px;
+      background-color: #4a4a4a;
       color: white;
+      border: none;
+      font-size: 24px;
+      padding: 8px 12px;
+      cursor: pointer;
+      border-radius: 6px;
+      z-index: 1000; /* que quede encima de todo */
+    }
+
+    .toggle-btn:hover {
+      background-color: #666666;
     }
 
     /* Contenedor del iframe */
@@ -95,12 +102,14 @@
 </head>
 <body>
 
+  <!-- Botón tipo "hamburger" -->
+  <button class="toggle-btn" id="toggleSidebar">☰</button>
+
   <!-- Sidebar / menú lateral -->
   <div class="sidebar" id="sidebar">
     <img src="img/devo_logo.png" alt="Logo Devoteam" class="logo">
     <button id="btn356" class="menu-button">Test 1</button>
     <button id="btn357" class="menu-button">Test 2</button>
-    <button id="toggleSidebar">Show/Hide Sidebar</button>
   </div>
 
   <!-- Contenido principal con iframe -->
@@ -177,4 +186,3 @@ window.addEventListener("message", (event) => {
 
 </body>
 </html>
-
