@@ -21,12 +21,19 @@
     /* Sidebar estilo menú */
     .sidebar {
       width: 200px;
-      background-color: #1E1E2F;
-      color: white;
+      background-color: #ffffff; /* Blanco */
+      color: black;
       display: flex;
       flex-direction: column;
       align-items: center;
       padding: 20px 0;
+      transition: width 0.3s;
+    }
+
+    .sidebar.hidden {
+      width: 0;
+      padding: 20px 0 20px 0;
+      overflow: hidden;
     }
 
     .logo {
@@ -41,7 +48,7 @@
       font-size: 18px;
       font-weight: bold;
       color: white;
-      background-color: #3B3B5A;
+      background-color: #000000; /* Botones negro */
       border: none;
       border-radius: 8px;
       cursor: pointer;
@@ -49,7 +56,19 @@
     }
 
     .menu-button:hover {
-      background-color: #565678;
+      background-color: #333333;
+    }
+
+    /* Botón Show/Hide Sidebar */
+    #toggleSidebar {
+      margin: 10px;
+      padding: 10px 15px;
+      font-size: 16px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      background-color: #000000;
+      color: white;
     }
 
     /* Contenedor del iframe */
@@ -60,6 +79,8 @@
       justify-content: center;
       align-items: flex-start;
       flex-direction: column;
+      background-color: #e0e0e0; /* Gris suave de fondo */
+      transition: margin-left 0.3s;
     }
 
     iframe {
@@ -75,14 +96,15 @@
 <body>
 
   <!-- Sidebar / menú lateral -->
-  <div class="sidebar">
+  <div class="sidebar" id="sidebar">
     <img src="img/devo_logo.png" alt="Logo Devoteam" class="logo">
     <button id="btn356" class="menu-button">Test 1</button>
     <button id="btn357" class="menu-button">Test 2</button>
+    <button id="toggleSidebar">Show/Hide Sidebar</button>
   </div>
 
   <!-- Contenido principal con iframe -->
-  <div class="main-content">
+  <div class="main-content" id="mainContent">
     <iframe
       id="looker"
       src="https://nubalia.cloud.looker.com/embed/dashboards/356?embed_domain=https://laura-diaz-dvt.github.io&sdk=3&allow_login_screen=true">
@@ -91,9 +113,8 @@
 
 <script>
 const iframe = document.getElementById('looker')
-let statusValue = null     // último Status capturado
-let salePriceValue = null 
-
+let statusValue = null
+let salePriceValue = null
 
 function loadDashboard(dashboardId) {
     let baseUrl = `https://nubalia.cloud.looker.com/embed/dashboards/${dashboardId}?embed_domain=https://laura-diaz-dvt.github.io&sdk=3&allow_login_screen=true`
@@ -110,10 +131,18 @@ function loadDashboard(dashboardId) {
     iframe.src = baseUrl
 }
 
-
-// Botones
+// Botones de dashboards
 document.getElementById('btn356').addEventListener('click', () => loadDashboard(356))
 document.getElementById('btn357').addEventListener('click', () => loadDashboard(357))
+
+// Show/Hide Sidebar
+const toggleButton = document.getElementById('toggleSidebar')
+const sidebar = document.getElementById('sidebar')
+const mainContent = document.getElementById('mainContent')
+
+toggleButton.addEventListener('click', () => {
+    sidebar.classList.toggle('hidden')
+})
 
 // Escuchar eventos del dashboard
 window.addEventListener("message", (event) => {
@@ -133,20 +162,11 @@ window.addEventListener("message", (event) => {
     const currentStatus = filtros?.Status
     const currentSalePrice = filtros?.["Sale Price"]
 
-    if (currentStatus) {
-      statusValue = currentStatus
-      console.log("Status actual:", statusValue)
-    }
-    if (currentSalePrice) {
-      salePriceValue = currentSalePrice
-      console.log("Sale Price actual:", salePriceValue)
-    }
-
+    if (currentStatus) statusValue = currentStatus
+    if (currentSalePrice) salePriceValue = currentSalePrice
   }
 })
 </script>
 
 </body>
 </html>
-
-
