@@ -7,22 +7,45 @@
 </head>
 <body>
 
-  <!-- Botón tipo "hamburger" -->
-  <button class="toggle-btn" id="toggleSidebar">☰</button>
+  <!-- Pantalla de inicio de sesión (PoC) -->
+  <div id="loginContainer" class="user-bar">
+    <form id="userForm" class="user-form">
+      <label for="userEmail">Usuario (email):</label>
+      <input type="email" id="userEmail" required placeholder="usuario@empresa.com">
 
-  <!-- Sidebar / menú lateral -->
-  <div class="sidebar" id="sidebar">
-    <img src="img/devo_logo.png" alt="Logo Devoteam" class="logo">
-    <button id="btn356" class="menu-button">Test 1</button>
-    <button id="btn357" class="menu-button">Test 2</button>
+      <label for="userRole">Rol:</label>
+      <select id="userRole" required>
+        <option value="admin">Admin</option>
+        <option value="ventas">Ventas</option>
+        <option value="cliente">Cliente</option>
+      </select>
+
+      <button type="submit">Entrar</button>
+
+      <span id="userInfo" class="user-info"></span>
+    </form>
   </div>
 
-  <!-- Contenido principal con iframe -->
-  <div class="main-content" id="mainContent">
-    <iframe
-      id="looker"
-      src="https://nubalia.cloud.looker.com/embed/dashboards/356?embed_domain=https://laura-diaz-dvt.github.io&sdk=3&allow_login_screen=true">
-    </iframe>
+  <div id="portalContainer" class="hidden">
+  <!-- Botón tipo "hamburger" -->
+    <button class="toggle-btn" id="toggleSidebar">☰</button>
+
+    <!-- Sidebar / menú lateral -->
+    <div class="sidebar" id="sidebar">
+      <img src="img/devo_logo.png" alt="Logo Devoteam" class="logo">
+      <button id="btn356" class="menu-button">Test 1</button>
+      <button id="btn357" class="menu-button">Test 2</button>
+
+      <button id="btnLogout" class="logout-button">Cerrar Sesión</button>
+    </div>
+
+    <!-- Contenido principal con iframe -->
+    <div class="main-content" id="mainContent">
+      <iframe
+        id="looker"
+        src="https://nubalia.cloud.looker.com/embed/dashboards/356?embed_domain=https://laura-diaz-dvt.github.io&sdk=3&allow_login_screen=true">
+      </iframe>
+    </div>
   </div>
 
 <script src="app.js"></script>
