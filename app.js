@@ -7,7 +7,6 @@ toggleButton.addEventListener('click', () => {
     sidebar.classList.toggle('hidden')
 })
 
-
 // Filtros comunes a capturar
 const filterValues = {
     Status: null,
@@ -33,26 +32,6 @@ const dashboards = {
   }
 
 
-// Usuario actual (PoC, no conectado al SSO real)
-let currentUser = null;
-
-// Configuración de qué ve cada rol en el portal
-const roleConfig = {
-  admin: {
-    homeDashboard: 356,
-    allowedDashboards: [356, 357]
-  },
-  ventas: {
-    homeDashboard: 357,
-    allowedDashboards: [357]
-  },
-  cliente: {
-    homeDashboard: 356,
-    allowedDashboards: [356]
-  }
-};
-
-
 function loadDashboard(dashboardId) {
     const dashboard = dashboards[dashboardId];
     if (!dashboard) return console.error("Dashboard no definido:", dashboardId);
@@ -74,85 +53,10 @@ function loadDashboard(dashboardId) {
     iframe.src = baseUrl;
 }
 
+
 // Botones de dashboards
 document.getElementById('btn356').addEventListener('click', () => loadDashboard(356))
 document.getElementById('btn357').addEventListener('click', () => loadDashboard(357))
-
-
-function applyUserToUI() {
-    const infoSpan = document.getElementById('userInfo');
-    const btn356 = document.getElementById('btn356');
-    const btn357 = document.getElementById('btn357');
-    const portalContainer = document.getElementById('portalContainer');
-    const loginContainer = document.getElementById('loginContainer');
-  
-    if (!currentUser) {
-      portalContainer.classList.add('hidden');   // portal oculto
-      if (loginContainer) loginContainer.classList.remove('hidden'); // mostrar login centrado
-      return;
-    }
-  
-    const cfg = roleConfig[currentUser.role];
-    if (infoSpan) infoSpan.textContent = `${currentUser.email} (${currentUser.role})`;
-    portalContainer.classList.remove('hidden');  // mostrar portal
-    if (loginContainer) loginContainer.classList.add('hidden'); // ocultar pantalla de login
-  
-    if (cfg) {
-      btn356.style.display = cfg.allowedDashboards.includes(356) ? '' : 'none';
-      btn357.style.display = cfg.allowedDashboards.includes(357) ? '' : 'none';
-    } else {
-      btn356.style.display = '';
-      btn357.style.display = '';
-    }
-}
-
-
-function initUserFromStorage() {
-  // Siempre empezamos sin usuario para forzar la pantalla de login
-  currentUser = null;
-  applyUserToUI();
-}
-
-
-// Manejo del formulario de usuario (PoC)
-const userForm = document.getElementById('userForm');
-const userEmailInput = document.getElementById('userEmail');
-const userRoleSelect = document.getElementById('userRole');
-
-if (userForm) {
-  userForm.addEventListener('submit', (e) => {
-    e.preventDefault();
-
-    const email = userEmailInput.value.trim();
-    const role = userRoleSelect.value;
-
-    if (!email || !role) return;
-
-    currentUser = { email, role };
-    localStorage.setItem('portalUser', JSON.stringify(currentUser));
-
-    applyUserToUI();
-
-    const cfg = roleConfig[role];
-    if (cfg) {
-      loadDashboard(cfg.homeDashboard);
-    }
-  });
-}
-
-// Inicializar usuario al cargar la página
-document.addEventListener('DOMContentLoaded', initUserFromStorage);
-
-const btnLogout = document.getElementById('btnLogout')
-
-btnLogout.addEventListener('click', () => {
-    currentUser = null;
-    localStorage.removeItem('portalUser');
-    iframe.src = "about:blank";
-    applyUserToUI();
-    console.log("Sesión cerrada correctamente");
-})
-
 
 
 // Capturar eventos del dashboard
